@@ -9,7 +9,6 @@ from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.popup import Popup
 from abc import ABC, abstractmethod
 import docx
-from openpyxl import Workbook
 
 class Building(ABC):
     def __init__(self, length, width, height):
@@ -166,22 +165,16 @@ class BuildingApp(App):
 
         # Сохранение результатов в отчет .docx
         doc = docx.Document()
-        doc.add_heading('Результаты расчетов', level=1)
+        doc.add_paragraph(f"Результаты расчетов")
         doc.add_paragraph(f"Общая площадь: {total_area} кв.м")
         doc.add_paragraph(f"Тепловая мощность: {heat_power} Вт")
-        doc.save('report.docx')
-
-        # Сохранение результатов в отчет .xlsx
-        wb = Workbook()
-        ws = wb.active
-        ws.append(["Общая площадь", "Тепловая мощность"])
-        ws.append([total_area, heat_power])
-        wb.save('report.xlsx')
-
+        doc.save('показания.docx')
+        
         popup = Popup(title='Сохранение',
-                      content=Label(text='Результаты сохранены в report.docx и report.xlsx'),
+                      content=Label(text='Результаты сохранены в показания.docx'),
                       size_hint=(None, None), size=(400, 200))
         popup.open()
 
 if __name__ == '__main__':
     BuildingApp().run()
+    
